@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <math.h>
+
+bool isPowerOfFive(int num) {
+    while (num > 1 && num % 5 == 0) {
+        num /= 5;
+    }
+    return num == 1;
+}
+
+int minBeautifulSubstrings(char *s) {
+    int n = strlen(s);
+    int dp[n + 1];  // dp[i] represents the minimum substrings needed to partition s[0...i-1] into beautiful substrings.
+
+    for (int i = 0; i <= n; i++) {
+        dp[i] = n + 1;  // Initialize with a value larger than the length of the string.
+    }
+
+    dp[0] = 0;  // Base case: empty string requires 0 partitions.
+
+    for (int i = 1; i <= n; i++) {
+        int num = 0;
+        for (int j = i; j >= 1; j--) {
+            if (s[j - 1] == '0' && j < i) {
+                break;  // Leading zeros are not allowed.
+            }
+            num = (s[j - 1] - '0') + num * 2;
+            if (num > 0 && num <= 25 && isPowerOfFive(num)) {
+                dp[i] = fmin(dp[i], dp[j - 1] + 1);
+            }
+        }
+    }
+
+    return dp[n] == n + 1 ? -1 : dp[n];
+}
+
+int main() {
+    char s[100];
+    printf("Enter a binary string: ");
+    scanf("%s", s);
+
+    int minPartitions = minBeautifulSubstrings(s);
+    printf("Minimum number of beautiful substrings: %d\n", minPartitions);
+
+    return 0;
+}
+

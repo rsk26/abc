@@ -1,0 +1,47 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+void generateparanthesis(int n,int opencount, int closecount , char current[], int index)
+{
+    if(index == 2*n)
+    {
+        current[index] = '\0';
+        printf("%s\n",current);
+        return;
+    }
+    
+    if(opencount<n)
+    {
+        current[index] = '(';
+        generateparanthesis(n,opencount + 1,closecount,current,index + 1);
+    }
+    
+    if(closecount<opencount)
+    {
+        current[index] = ')';
+        generateparanthesis(n,opencount,closecount + 1,current,index + 1);
+    }
+}
+
+void generateallparanthesis(int n)
+{
+    if(n<=0){
+        printf("invalid input\n");
+        return;
+ 
+    }
+    
+    char current[100];
+    generateparanthesis(n,0,0,current,0);
+
+}
+
+int main()
+{
+    int n;
+    printf("enter the pairs of paranthesis:\n");
+    scanf("%d",&n);
+    printf("all combinations of paranthesis are:\n");
+    generateallparanthesis(n);
+    return 0;
+}
